@@ -7,6 +7,8 @@ const reviewSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  comment: String,
+  commentReplies: [Object],
 });
 const linkSchema = new mongoose.Schema({
   title: String,
@@ -49,7 +51,7 @@ const CourseSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-     category: {
+    category: {
       type: String,
       // required: true,
     },
@@ -62,14 +64,9 @@ const CourseSchema = new mongoose.Schema(
       type: Number,
     },
     thumbnail: {
-      public_id: { 
-        type: String, 
-        // required: true 
-      },
-      url: { 
-        type: String, 
-        // required: true 
-      },
+      url: String,
+      public_id: String,
+      // required: true
     },
     tags: {
       type: String,
@@ -111,61 +108,58 @@ const CourseSchema = new mongoose.Schema(
   }
 );
 
-
 module.exports = mongoose.model("course", CourseSchema);
 
-
-
- // slug: {
-    //   type: String,
-    //   required: true,
-    // },
+// slug: {
+//   type: String,
+//   required: true,
+// },
 //  image: {
-  //     type: String,
-  //     default: "",
-  //   },
-  //   category: {
-  //     type: String,
-  //     required: true,
-  //   },
-  //   published: {
-  //     type: Boolean,
-  //     default: false,
-  //   },
-  //   instructor: {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "User",
-  //     required: true,
-  //   },
-  //   paid: {
-  //     type: Boolean,
-  //     default: false,
-  //   },
-  //   lessons: {
-  //     type: mongoose.Schema.Types.Array,
-  //     ref: "Lesson",
-  //   },
+//     type: String,
+//     default: "",
+//   },
+//   category: {
+//     type: String,
+//     required: true,
+//   },
+//   published: {
+//     type: Boolean,
+//     default: false,
+//   },
+//   instructor: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "User",
+//     required: true,
+//   },
+//   paid: {
+//     type: Boolean,
+//     default: false,
+//   },
+//   lessons: {
+//     type: mongoose.Schema.Types.Array,
+//     ref: "Lesson",
+//   },
 
-  //   totalHours: {
-  //     type: String,
-  //     default: 0,
-  //   },
-  //   enrolls: {
-  //     type: String,
-  //     default: 0,
-  //   },
-  //   ratings: [
-  //     {
-  //       stars: { type: Number, minLength: 0, maxLenght: 5 },
-  //       comment: String,
-  //       postedBy: {
-  //         type: mongoose.Schema.Types.ObjectId,
-  //         ref: "User",
-  //       },
-  //     },
-  //   ],
-  //   totalRatings: {
-  //     type: Number,
-  //     default: 0,
-  //   },
-  // }
+//   totalHours: {
+//     type: String,
+//     default: 0,
+//   },
+//   enrolls: {
+//     type: String,
+//     default: 0,
+//   },
+//   ratings: [
+//     {
+//       stars: { type: Number, minLength: 0, maxLenght: 5 },
+//       comment: String,
+//       postedBy: {
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: "User",
+//       },
+//     },
+//   ],
+//   totalRatings: {
+//     type: Number,
+//     default: 0,
+//   },
+// }

@@ -2,10 +2,10 @@ const { default: slugify } = require("slugify");
 const dotenv = require("dotenv");
 dotenv.config();
 const { BadRequestError } = require("../../errors");
-const Course = require("../../models/courseModels/courseModel");
+const Course = require("../../models/courseModel");
 const asynchandler = require("express-async-handler");
 const cloudinary = require("../../config/cloudinary");
-const sendMail = require("../../controllers/emailController");
+const sendMail = require("../emailController");
 
 
 //CREATE COURSE ENDPOINT
@@ -50,6 +50,50 @@ const createCourse = asynchandler(async (req, res) => {
   }
 });
 
+// ################ UPLOAD thumbnail ##################
+const uploadCourseThumbnail = asynchandler(async(req, res)=>{
+  try {
+     const  thumbnail  = req.body;
+     const { courseId } = req.params;
+
+    const course = await Course.findById(courseId);
+    // if (course.instructor !== req.user._id.toString()){
+    //   throw new Error("You dont have permission", 400)
+    // }
+      if (thumbnail) {
+        if (course?.thumbnail?.public_id) {
+          await cloudinary.uploader.destroy(course?.thumbnail.public_id);
+
+          const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: "course-thumbnail",
+          });
+          course.thumbnail = {
+            public_id: result.public_id,
+            url: result.secure_url,
+          };
+        } else {
+          const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: "course-thumbnail",
+          });
+          course.thumbnail = {
+            public_id: result.public_id,
+            url: result.secure_url,
+          };
+        }
+      }
+
+    await course.save();
+    res.status(200).json({
+      status: true,
+      message: "Course thumbnail updated successfully",
+      course,
+    });
+    
+  } catch (error) {
+    throw new BadRequestError(error);
+  }
+})
+
 
 //####################################################################
 //UPLOAD VIDEO AND UPDATE
@@ -60,8 +104,7 @@ const uploadCourseVideo = asynchandler(async (req, res) => {
   console.log(demoUrl, "demojdss");
   try {
     const course = await Course.findById(courseId);
-    console.log(course.demoUrl);
-    console.log(req.file.path);
+    
     if (course?.demoUrl?.public_id) {
       // if (course?.demoUrl?.public_id) {
       //   await cloudinary.uploader.destroy(course?.demoUrl.public_id);
@@ -305,6 +348,53 @@ const answerQuestion = asynchandler(async (req, res) => {
   }
 });
 
+// ############################# Add Review #################
+
+const addReview = asynchandler(async(req, res) =>{
+  try {
+    const userCourseList = req.user?.course
+    const courseId =  req.params.id;
+
+    const courseExists = userCourseList?.some((course) => course.id.toString() === courseId.toString())
+    console.log(courseExists, "courseExists");
+    
+    if(courseExists){
+      throw new Error("You are not allow to access this course", 400)
+    }
+
+    const course = Course.findById(courseId)
+
+    const {review, rating} = req.body
+
+    const{password, ...others} = req.user?._doc
+    const newReview = {
+      user: others,
+      rating,
+      comment: review,
+    };
+    course.reviews.push(newReview);
+
+    let avg=0;
+     course.reviews.forEach((rev)=>{avg += rev.rating})
+
+     if(course){
+      course.ratings = avg/ course.ratings.length
+     }
+     await course.save()
+
+     res.status(200).json({
+       status: true,
+       message: "Successfully",
+       course,
+     });
+
+
+  } catch (error) {
+    throw new BadRequestError(error);
+  }
+
+})
+
 // RATING AND STAR
 // const addRating = asynchandler(async (req, res) => {
 //   const { courseId } = req.params;
@@ -343,5 +433,6 @@ module.exports = {
   createCourseQuestion,
   answerQuestion,
   deleteACourse,
+  uploadCourseThumbnail,
   // addRating,
 };

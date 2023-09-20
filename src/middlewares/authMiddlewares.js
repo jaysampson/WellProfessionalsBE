@@ -1,4 +1,4 @@
-const User = require("../models/userModels/authUserModel");
+const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const asynchandler = require("express-async-handler");
 const { UnauthenticatedError } = require("../errors");

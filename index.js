@@ -11,6 +11,7 @@ const {
 const courseCatRouter = require("./src/routes/courseCatRoutes");
 const courseRouter = require("./src/routes/courseRoutes");
 const { stripeRouter } = require("./src/routes/stripeRoutes");
+const orderRouter = require("./src/routes/orderRoutes");
 require("dotenv").config();
 
 // dbConnect();
@@ -30,6 +31,7 @@ app.use("/api/user", userRouter);
 app.use("/api/course/category", courseCatRouter);
 app.use("/api/course", courseRouter);
 app.use("/api/stripe", stripeRouter);
+app.use("/api/order", orderRouter)
 
 //DEFINE GLOBAL ERRORS
 // app.use(ErrorHandler)

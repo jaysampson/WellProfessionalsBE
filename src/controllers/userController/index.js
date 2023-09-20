@@ -1,6 +1,6 @@
 const { generateToken } = require("../../config/jwtToken");
 const sendEmail = require("../../controllers/emailController");
-const User = require("../../models/userModels/authUserModel");
+const User = require("../../models/userModel");
 const asynchandler = require("express-async-handler");
 const crypto = require("crypto");
 const { BadRequestError, UnauthenticatedError } = require("../../errors");

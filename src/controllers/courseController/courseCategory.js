@@ -1,5 +1,5 @@
 const { default: slugify } = require("slugify");
-const CourseCategory = require("../../models/courseModels/courseCatModel");
+const CourseCategory = require("../../models/courseCatModel");
 const asynchandler = require("express-async-handler");
 const { BadRequestError } = require("../../errors");
 

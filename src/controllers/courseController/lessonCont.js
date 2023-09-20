@@ -1,9 +1,9 @@
 const { default: slugify } = require("slugify");
 const { BadRequestError } = require("../../errors");
-const Course = require("../../models/courseModels/courseModel");
-const Lesson = require("../../models/courseModels/lessonModel");
+const Course = require("../../models/courseModel");
+const Lesson = require("../../models/lessonModel");
 const asynchandler = require("express-async-handler");
-const { find } = require("../../models/userModels/authUserModel");
+const { find } = require("../../models/userModel");
 
 //CREATE LESSONS ENDPOINT
 

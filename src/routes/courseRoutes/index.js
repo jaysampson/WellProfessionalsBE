@@ -19,7 +19,8 @@ const {
   getCourseContentToValidUser,
   createCourseQuestion,
   answerQuestion,
-} = require("../../controllers/courseController/courseController");
+  uploadCourseThumbnail,
+} = require("../../controllers/courseController/courseCont");
 const {
   createLesson,
   deleteALesson,
@@ -28,7 +29,7 @@ const {
   getAllLesson2,
   getAllCourseLesson,
   getAllLessonModel,
-} = require("../../controllers/courseController/lessonController");
+} = require("../../controllers/courseController/lessonCont");
 const storage = require("../../middlewares/multer");
 const upload = require("../../middlewares/multer");
 const courseRouter = express.Router();
@@ -36,6 +37,12 @@ const courseRouter = express.Router();
 // COURSES ROUTES
 courseRouter.post("/", authMiddleware, isAdmin, createCourse);
 // courseRouter.post("/:courseId/add-rating", authMiddleware, addRating);
+courseRouter.put(
+  "/thumbnail/:courseId",
+  upload.single("file"),
+  authMiddleware,
+  uploadCourseThumbnail
+);
 courseRouter.patch("/edit-course/:id", authMiddleware,isAdmin, updateACourse);
 courseRouter.put(
   "/video-upload/:courseId",
@@ -43,7 +50,7 @@ courseRouter.put(
   authMiddleware,
   uploadCourseVideo
 );
-courseRouter.get("/", authMiddleware, getAllCoursesWithoutSub);
+courseRouter.get("/",  getAllCoursesWithoutSub);
 courseRouter.get("/:id", authMiddleware, getSingleWithoutSubCourse);
 courseRouter.get("/get-user-course-content/:id",authMiddleware, getCourseContentToValidUser);
 courseRouter.delete("/:id", authMiddleware, isAdmin, deleteACourse);

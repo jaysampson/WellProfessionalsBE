@@ -17,7 +17,7 @@
     {"title":"No previous coding experience is needed"},
     {"title":"Prepare to learn real life skills and build real web apps that will get you hired"}
   ],
-  "courseData":[
+  "lessonData":[
     {
       "videoUrl":"https://fdkfkkdldd",
       "title":"Introduction",

@@ -159,7 +159,7 @@ const getAllCoursesWithoutSub = asynchandler(async (req, res) => {
   }
   try {
     const getCourse = await Course.find(queryObject).select(
-      "-courseData.videoUrl -courseData.description -courseData.links -courseData.questions -courseData.links -courseData.videoSection"
+      "-lessonData.videoUrl -lessonData.description -lessonData.links -lessonData.questions -lessonData.links -lessonData.videoSection"
     );
     res.status(201).json({
       status: true,
@@ -181,7 +181,7 @@ const getSingleWithoutSubCourse = asynchandler(async (req, res) => {
     const courseId = req.params.id;
 
       const course = await Course.findById(req.params.id).select(
-        "-courseData.videoUrl -courseData.description -courseData.links -courseData.questions -courseData.links -courseData.videoSection"
+        "-lessonData.videoUrl -lessonData.description -lessonData.links -lessonData.questions -lessonData.links -lessonData.videoSection"
       );
 
       res.status(200).json({
@@ -258,7 +258,7 @@ const getCourseContentToValidUser = asynchandler(async (req, res) => {
     }
 
     const course = await Course.findById(courseId);
-    const content = course?.courseData;
+    const content = course?.lessonData;
     res.status(200).json({
       status: true,
       message: "Successfully",
@@ -276,7 +276,7 @@ const createCourseQuestion = asynchandler(async (req, res) => {
   try {
     const course = await Course.findById(courseId);
     // console.log(course, "ppppppppppppp");
-    courseContent = course?.courseData?.find((item) => item.id === contentId);
+    courseContent = course?.lessonData?.find((item) => item.id === contentId);
     console.log(courseContent, "courseContent");
 
     if (!courseContent) {
@@ -307,7 +307,7 @@ const answerQuestion = asynchandler(async (req, res) => {
   try {
     const course = await Course.findById(courseId);
 
-    courseContent = course?.courseData?.find((item) => item.id === contentId);
+    courseContent = course?.lessonData?.find((item) => item.id === contentId);
 
     if (!courseContent) {
       throw new Error("invalid content Id", 400);

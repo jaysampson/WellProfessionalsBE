@@ -21,7 +21,7 @@ const questionSchema = new mongoose.Schema({
   questionReplies: [],
 });
 
-const courseDataSchema = new mongoose.Schema({
+const lessonDataSchema = new mongoose.Schema({
   videoUrl: String,
   videoThunbnail: Object,
   title: String,
@@ -93,7 +93,7 @@ const CourseSchema = new mongoose.Schema(
       },
     ],
     review: [reviewSchema],
-    courseData: [courseDataSchema],
+    lessonData: [lessonDataSchema],
     ratings: {
       type: Number,
       default: 0,

@@ -51,7 +51,7 @@ courseRouter.put(
   uploadCourseVideo
 );
 courseRouter.get("/",  getAllCoursesWithoutSub);
-courseRouter.get("/:id", authMiddleware, getSingleWithoutSubCourse);
+courseRouter.get("/:id", getSingleWithoutSubCourse);
 courseRouter.get("/get-user-course-content/:id",authMiddleware, getCourseContentToValidUser);
 courseRouter.delete("/:id", authMiddleware, isAdmin, deleteACourse);
 

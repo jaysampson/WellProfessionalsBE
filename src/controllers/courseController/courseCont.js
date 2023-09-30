@@ -26,18 +26,7 @@ const createCourse = asynchandler(async (req, res) => {
         url: myCloud.secure_url,
       };
     }
-    //UPLOAD VIDEOS
-    // const denoUrl = data.denoUrl;
-    // if (denoUrl) {
-    //   const mycloudVideo = await cloudinary.uploader.upload(denoUrl, {
-    //     resource_type: "video",
-    //     folder: "denoVideo",
-    //   });
-    //   data.denoUrl = {
-    //     public_id: mycloudVideo.public_id,
-    //     url: mycloudVideo.secure_url,
-    //   };
-    // }
+   
     const course = await Course.create(data);
     res.status(201).json({
       status: true,

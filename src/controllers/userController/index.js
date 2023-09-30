@@ -186,17 +186,17 @@ const updateAvatar = asynchandler(async (req, res) => {
       if (user?.image?.public_id) {
         await cloudinary.uploader.destroy(user?.image.public_id);
 
-        const myCloud = await cloudinary.uploader.upload(image, {
+        const myCloud = await cloudinary.uploader.upload(req.file.path, {
           folder: "avatars",
           width: 150,
         });
-        console.log(myCloud, "OBjECT");
+        console.log(myCloud, "OBJECT");
         user.image = {
           public_id: myCloud.public_id,
           url: myCloud.secure_url,
         };
       } else {
-        const myCloud = await cloudinary.uploader.upload(image, {
+        const myCloud = await cloudinary.uploader.upload(req.file.path, {
           folder: "avatars",
           width: 150,
         });

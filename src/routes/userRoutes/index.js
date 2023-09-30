@@ -20,6 +20,7 @@ const {
 } = require("../../middlewares/authMiddlewares");
 const validateEmail = require("../../middlewares/emailValidation");
 const storage = require("../../middlewares/multer");
+const upload = require("../../middlewares/multer");
 
 const userRouter = express.Router();
 
@@ -36,6 +37,7 @@ userRouter.get("/:id", authMiddleware, isAdmin, getAUser);
 userRouter.put("/update-password", authMiddleware, updatePassword);
 userRouter.put(
   "/update-user-avatar",
+  upload.single("file"),
   authMiddleware,
   updateAvatar
 );

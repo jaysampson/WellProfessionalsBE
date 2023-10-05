@@ -9,10 +9,10 @@ const stripeRouter = express.Router();
 
 stripeRouter.post("/create-checkout-session", authMiddleware, webCreateCheckout)
 stripeRouter.post("/intent", authMiddleware, creatMobilePaymentsIntent);
-stripeRouter.post(
-  "/webhook",
-  express.raw({ type: "application/json" }),
-  stripeWebHook
-);
+// stripeRouter.post(
+//   "/webhook",
+//   express.raw({ type: "application/json" }),
+//   stripeWebHook
+// );
 
 module.exports = {stripeRouter}

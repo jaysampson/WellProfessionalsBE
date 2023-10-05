@@ -54,25 +54,25 @@ const webCreateCheckout = asynchandler(async (req, res) => {
 
 const creatMobilePaymentsIntent = asynchandler(async (req, res) => {
 
-  console.log(req.body.userId, req.body.amount, JSON.stringify(req.body.courses), "asasak");
-  const customer = await stripe.customers.create({
-    metadata: {
-      userId: req.body.userId,
-      // courses: JSON.stringify(req.body.courses),
-    },
-  });
+  // console.log(req.body.userId, req.body.amount, JSON.stringify(req.body.courses), "asasak");
+  // const customer = await stripe.customers.create({
+  //   metadata: {
+  //     userId: req.body.userId,
+  //     // courses: JSON.stringify(req.body.courses),
+  //   },
+  // });
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: req.body.amount,
       currency: "usd",
-      customer: customer.id,
+      // customer: customer.id,
       automatic_payment_methods: {
         enabled: true,
       },
     });
     res.status(200).json({
       paymentIntent: paymentIntent.client_secret,
-      customer: customer.id,
+      // customer: customer.id,
     });
   } catch (error) {
     throw new BadRequestError(error);

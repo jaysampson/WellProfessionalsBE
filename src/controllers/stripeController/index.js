@@ -75,6 +75,7 @@ const creatMobilePaymentsIntent = asynchandler(async (req, res) => {
       // customer: customer.id,
     });
   } catch (error) {
+    console.log(error, "error");
     throw new BadRequestError(error);
   }
 });

@@ -177,6 +177,9 @@ const updateAUser = asynchandler(async (req, res) => {
 
 //UPDATE AVATAR
 const updateAvatar = asynchandler(async (req, res) => {
+
+  
+
   const { image } = req.body;
   const _id = req.user;
   try {
@@ -207,6 +210,7 @@ const updateAvatar = asynchandler(async (req, res) => {
         };
       }
     }
+    const { password, ...others } = user._doc;
     await user.save();
     res.status(200).json({
       status: true,

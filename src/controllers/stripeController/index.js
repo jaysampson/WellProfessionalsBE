@@ -53,24 +53,26 @@ const webCreateCheckout = asynchandler(async (req, res) => {
 });
 
 const creatMobilePaymentsIntent = asynchandler(async (req, res) => {
-  const customer = await stripe.customers.create({
-    metadata: {
-      userId: req.body.userId,
-      courses: JSON.stringify(req.body.courses),
-    },
-  });
+
+  console.log(req.body.userId, JSON.stringify(req.body.courses), "asasak");
+  // const customer = await stripe.customers.create({
+  //   metadata: {
+  //     userId: req.body.userId,
+  //     courses: JSON.stringify(req.body.courses),
+  //   },
+  // });
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: req.body.amount,
       currency: "usd",
-      customer: customer.id,
+      // customer: customer.id,
       automatic_payment_methods: {
         enabled: true,
       },
     });
     res.status(200).json({
       paymentIntent: paymentIntent.client_secret,
-      customer: customer.id,
+      // customer: customer.id,
     });
   } catch (error) {
     throw new BadRequestError(error);
@@ -107,7 +109,16 @@ const stripeWebHook = asynchandler(async (req, res) => {
     data = req.body.data.object;
     eventType = req.body.type;
   }
-  if (eventType === "payment_intent.succeeded") {
+  // if (eventType === "payment_intent.succeeded") {
+  //   stripe.customers
+  //     .retrieve(data.customer)
+  //     .then((customer) => {
+  //       console.log(customer);
+  //       console.log("data", data);
+  //     })
+  //     .catch((err) => console.log(err.message));
+  // }
+  if (eventType === "checkout.session.completed") {
     stripe.customers
       .retrieve(data.customer)
       .then((customer) => {

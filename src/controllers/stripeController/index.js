@@ -136,5 +136,5 @@ const stripeWebHook = asynchandler(async (req, res) => {
 module.exports = {
   webCreateCheckout,
   creatMobilePaymentsIntent,
-  // stripeWebHook,
+  stripeWebHook,
 };

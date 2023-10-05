@@ -2,7 +2,7 @@ const express = require("express");
 const asynchandler = require("express-async-handler");
 require("dotenv").config();
 const Stripe = require("stripe");
-const stripe = Stripe(process.env.STRIPE_KEY);
+const stripe = Stripe(process.env.STRIPE_SECERT_KEY);
 
 const webCreateCheckout = asynchandler(async (req, res) => {
   const line_item = req.body.item.map((item) => {
@@ -53,28 +53,25 @@ const webCreateCheckout = asynchandler(async (req, res) => {
 });
 
 const creatMobilePaymentsIntent = asynchandler(async (req, res) => {
-
-  
   const customer = await stripe.customers.create({
     metadata: {
       userId: req.body.userId,
+      courses: JSON.stringify(req.body.courses),
     },
   });
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: req.body.amount,
       currency: "usd",
-       customer: customer.id,
+      customer: customer.id,
       automatic_payment_methods: {
         enabled: true,
       },
     });
-    res
-      .status(200)
-      .json({
-        paymentIntent: paymentIntent.client_secret,
-        customer: customer.id,
-      });
+    res.status(200).json({
+      paymentIntent: paymentIntent.client_secret,
+      customer: customer.id,
+    });
   } catch (error) {
     throw new BadRequestError(error);
   }
@@ -84,8 +81,8 @@ const creatMobilePaymentsIntent = asynchandler(async (req, res) => {
 
 // This is your Stripe CLI webhook secret for testing your endpoint locally.
 let endpointSecret;
-endpointSecret =
-  "whsec_ca7a2e250f7f258fa42e7d0d25816446de00632f5f7eaa049dd2d6bf24247f21";
+// endpointSecret =
+//   "whsec_ca7a2e250f7f258fa42e7d0d25816446de00632f5f7eaa049dd2d6bf24247f21";
 
 const stripeWebHook = asynchandler(async (req, res) => {
   const sig = req.headers["stripe-signature"];
@@ -104,18 +101,20 @@ const stripeWebHook = asynchandler(async (req, res) => {
       res.status(400).send(`Webhook Error: ${err.message}`);
       return;
     }
-    data= event.data.object;
+    data = event.data.object;
     eventType = event.type;
-  }else{
+  } else {
     data = req.body.data.object;
     eventType = req.body.type;
-    if(eventType === "checkout.session.conpleted"){
-      stripe.customers.retrieve(data.customer).then((customer) =>{
+  }
+  if (eventType === "payment_intent.succeeded") {
+    stripe.customers
+      .retrieve(data.customer)
+      .then((customer) => {
         console.log(customer);
-        console.log("data", data)
-      }).catch((err)=> console.log(err.message))
-    }
-
+        console.log("data", data);
+      })
+      .catch((err) => console.log(err.message));
   }
 
   // Return a 200 response to acknowledge receipt of the event

@@ -8,11 +8,26 @@ const NotificationModel = require("../../models/notificationModel");
 const User = require("../../models/userModel");
 const asynchandler = require("express-async-handler");
 const sendMail = require("../emailController");
+require("dotenv").config();
+const Stripe = require("stripe");
+const stripe = Stripe(process.env.STRIPE_SECERT_KEY);
 
 const createOrder = asynchandler(async (req, res) => {
   try {
     const { courseId, payment_info } = req.body;
     const user = await User.findById(req.user._id);
+
+    if(payment_info){
+      if("id" in payment_info){
+        const paymentIntentId = payment_info.id
+        const paymentIntent = await stripe.paymentIntents.retrieve(
+          paymentIntentId
+        );
+        if( paymentIntent !== "success"){
+          throw new Error("Payment not authorized", 400)
+        }
+      }
+    }
 
     const courseExistInUser = user.courses.some(
       (course) => course.id.toString() === courseId

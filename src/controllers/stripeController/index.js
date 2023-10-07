@@ -57,12 +57,7 @@ const webCreateCheckout = asynchandler(async (req, res) => {
 });
 
 const creatMobilePaymentsIntent = asynchandler(async (req, res) => {
-  console.log(
-    req.body.userId,
-    req.body.amount,
-    JSON.stringify(req.body.cart),
-    "asasak"
-  );
+
   const customer = await stripe.customers.create({
     metadata: {
       userId: req.body.userId,
@@ -83,7 +78,7 @@ const creatMobilePaymentsIntent = asynchandler(async (req, res) => {
     res.status(200).json({
       paymentIntent: paymentIntent.client_secret,
       customer: customer.id,
-      cart: customer.cart,
+      cart: customer,
       
     });
   } catch (error) {

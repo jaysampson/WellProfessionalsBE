@@ -78,7 +78,7 @@ const creatMobilePaymentsIntent = asynchandler(async (req, res) => {
     res.status(200).json({
       paymentIntent: paymentIntent.client_secret,
       customer: customer.id,
-      cart: customer,
+      cart: customer.cart
       
     });
   } catch (error) {

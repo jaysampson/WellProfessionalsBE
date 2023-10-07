@@ -1,4 +1,8 @@
 const express = require("express");
+const Course = require("../../models/courseModel");
+const OrderModel = require("../../models/orderModel");
+const NotificationModel = require("../../models/notificationModel");
+const User = require("../../models/userModel");
 const asynchandler = require("express-async-handler");
 require("dotenv").config();
 const Stripe = require("stripe");
@@ -53,14 +57,20 @@ const webCreateCheckout = asynchandler(async (req, res) => {
 });
 
 const creatMobilePaymentsIntent = asynchandler(async (req, res) => {
-
-  console.log(req.body.userId, req.body.amount, JSON.stringify(req.body.courses), "asasak");
+  console.log(
+    req.body.userId,
+    req.body.amount,
+    JSON.stringify(req.body.cart),
+    "asasak"
+  );
   const customer = await stripe.customers.create({
     metadata: {
       userId: req.body.userId,
-      courses: JSON.stringify(req.body.courses),
+      cart: req.body.cart,
     },
   });
+  console.log(customer, "customer");
+
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: req.body.amount,
@@ -73,6 +83,8 @@ const creatMobilePaymentsIntent = asynchandler(async (req, res) => {
     res.status(200).json({
       paymentIntent: paymentIntent.client_secret,
       customer: customer.id,
+      cart: customer.cart,
+      
     });
   } catch (error) {
     console.log(error, "error");
@@ -110,16 +122,7 @@ const stripeWebHook = asynchandler(async (req, res) => {
     data = req.body.data.object;
     eventType = req.body.type;
   }
-  // if (eventType === "payment_intent.succeeded") {
-  //   stripe.customers
-  //     .retrieve(data.customer)
-  //     .then((customer) => {
-  //       console.log(customer);
-  //       console.log("data", data);
-  //     })
-  //     .catch((err) => console.log(err.message));
-  // }
-  if (eventType === "checkout.session.completed") {
+  if (eventType === "payment_intent.succeeded") {
     stripe.customers
       .retrieve(data.customer)
       .then((customer) => {
@@ -128,6 +131,15 @@ const stripeWebHook = asynchandler(async (req, res) => {
       })
       .catch((err) => console.log(err.message));
   }
+  // if (eventType === "checkout.session.completed") {
+  //   stripe.customers
+  //     .retrieve(data.customer)
+  //     .then((customer) => {
+  //       console.log(customer);
+  //       console.log("data", data);
+  //     })
+  //     .catch((err) => console.log(err.message));
+  // }
 
   // Return a 200 response to acknowledge receipt of the event
   res.send().end();
@@ -136,5 +148,5 @@ const stripeWebHook = asynchandler(async (req, res) => {
 module.exports = {
   webCreateCheckout,
   creatMobilePaymentsIntent,
-  // stripeWebHook,
+  stripeWebHook,
 };

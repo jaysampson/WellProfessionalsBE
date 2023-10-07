@@ -66,7 +66,7 @@ const creatMobilePaymentsIntent = asynchandler(async (req, res) => {
   const customer = await stripe.customers.create({
     metadata: {
       userId: req.body.userId,
-      cart: req.body.cart,
+      cart: JSON.stringify(req.body.cart),
     },
   });
   console.log(customer, "customer");

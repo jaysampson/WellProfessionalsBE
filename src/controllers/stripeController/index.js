@@ -64,7 +64,7 @@ const creatMobilePaymentsIntent = asynchandler(async (req, res) => {
       cart: JSON.stringify(req.body.cart),
     },
   });
-  console.log(customer, "customer");
+  // console.log(customer, "customer");
 
   try {
     const paymentIntent = await stripe.paymentIntents.create({
@@ -116,6 +116,7 @@ const stripeWebHook = asynchandler(async (req, res) => {
   } else {
     data = req.body.data.object;
     eventType = req.body.type;
+    console.log(req.body.data,"req.body")
   }
   if (eventType === "payment_intent.succeeded") {
     stripe.customers

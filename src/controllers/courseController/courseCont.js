@@ -10,6 +10,7 @@ const sendMail = require("../emailController");
 //CREATE COURSE ENDPOINT
 const createCourse = asynchandler(async (req, res) => {
   const { _id } = req.user;
+  console.log(req.user, "requser")
   const data = req.body;
   try {
     if (_id) {
@@ -28,6 +29,7 @@ const createCourse = asynchandler(async (req, res) => {
     }
    
     const course = await Course.create(data);
+    console.log(course, "course")
     res.status(201).json({
       status: true,
       message: "Course created successfully",
@@ -239,7 +241,7 @@ const getCourseContentToValidUser = asynchandler(async (req, res) => {
       (course) => course._id.toString() === courseId
     );
     if (!courseExists) {
-      throw new Error("You are not allow to access this course", 404);
+      throw new Error("You are have not purchase this course", 404);
     }
 
     const course = await Course.findById(courseId);

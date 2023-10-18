@@ -77,9 +77,7 @@ const CourseSchema = new mongoose.Schema(
       required: true,
     },
     demoUrl: {
-      public_id: String,
-      url: String,
-      // type: String,
+      type: String,
       // required: true,
     },
     benefits: [

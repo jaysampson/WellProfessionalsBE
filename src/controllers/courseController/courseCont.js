@@ -157,6 +157,26 @@ const getAllCoursesWithoutSub = asynchandler(async (req, res) => {
   }
 });
 
+const getAllCoursesPurchased = asynchandler(async (req, res) => {
+  const { category } = req.query;
+
+  let queryObject = {};
+  if (category) {
+    queryObject.category = category;
+  }
+  try {
+    const getCourse = await Course.find(queryObject)
+    res.status(201).json({
+      status: true,
+      message: "Successfully",
+      nbHits: getCourse.length,
+      getCourse,
+    });
+  } catch (error) {
+    throw new BadRequestError(error);
+  }
+});
+
 //###################### GET A COURSE WITHout PURCHASING #####################
 
 const getSingleWithoutSubCourse = asynchandler(async (req, res) => {
@@ -250,6 +270,7 @@ const getCourseContentToValidUser = asynchandler(async (req, res) => {
       status: true,
       message: "Successfully",
       content,
+      course,
     });
   } catch (error) {
     throw new BadRequestError(error);
@@ -423,4 +444,5 @@ module.exports = {
   deleteACourse,
   uploadCourseThumbnail,
   // addRating,
+  getAllCoursesPurchased,
 };

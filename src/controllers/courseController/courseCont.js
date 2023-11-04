@@ -6,6 +6,7 @@ const Course = require("../../models/courseModel");
 const asynchandler = require("express-async-handler");
 const cloudinary = require("../../config/cloudinary");
 const sendMail = require("../emailController");
+const User = require("../../models/userModel");
 
 //CREATE COURSE ENDPOINT
 const createCourse = asynchandler(async (req, res) => {
@@ -157,7 +158,8 @@ const getAllCoursesWithoutSub = asynchandler(async (req, res) => {
   }
 });
 
-const getAllCoursesPurchased = asynchandler(async (req, res) => {
+const getAllCoursesInfo = asynchandler(async (req, res) => {
+  const { courseId, userId } = req.params;
   const { category } = req.query;
 
   let queryObject = {};
@@ -165,11 +167,11 @@ const getAllCoursesPurchased = asynchandler(async (req, res) => {
     queryObject.category = category;
   }
   try {
-    const getCourse = await Course.find(queryObject)
+    const getCourse = await Course.find(queryObject);
     res.status(201).json({
       status: true,
       message: "Successfully",
-      nbHits: getCourse.length,
+      // nbHits: getCourse.length,
       getCourse,
     });
   } catch (error) {
@@ -266,16 +268,20 @@ const getCourseContentToValidUser = asynchandler(async (req, res) => {
 
     const course = await Course.findById(courseId);
     const content = course?.lessonData;
+    const { description,lessonData, ...others } = course._doc;
     res.status(200).json({
       status: true,
       message: "Successfully",
       content,
-      course,
+      courseData: others
     });
   } catch (error) {
     throw new BadRequestError(error);
   }
 });
+
+
+
 
 // ################# add Questions ######################
 
@@ -444,5 +450,5 @@ module.exports = {
   deleteACourse,
   uploadCourseThumbnail,
   // addRating,
-  getAllCoursesPurchased,
+  getAllCoursesInfo,
 };

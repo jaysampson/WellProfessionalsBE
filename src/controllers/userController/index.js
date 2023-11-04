@@ -57,6 +57,8 @@ const userLogin = asynchandler(async (req, res) => {
 
 const getMe = asynchandler(async (req, res) => {
   const user = req.user;
+  // console.log(user,"user")
+ 
   if (!user) throw new BadRequestError("User not found");
   const { password, ...others } = user._doc;
   res.status(200).json({

@@ -32,7 +32,7 @@ userRouter.post("/forgot-password", validateEmail, forgotpassword)
 //GET ROUTES
 userRouter.get("/all-users", authMiddleware, isAdmin, getAllUsers);
 userRouter.get("/me", authMiddleware, getMe);
-userRouter.get("/:id", authMiddleware, isAdmin, getAUser);
+userRouter.get("/:id", authMiddleware, getAUser);
 
 userRouter.put("/update-password", authMiddleware, updatePassword);
 userRouter.put(

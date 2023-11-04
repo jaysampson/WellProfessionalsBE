@@ -30,7 +30,7 @@ const createOrder = asynchandler(async (req, res) => {
     }
 
     const courseExistInUser = user.courses.some(
-      (course) => course.id.toString() === courseId
+      (course) => course._id.toString() === courseId
     );
     if (courseExistInUser) {
       throw new Error("You have already purchased this course", 400);
@@ -40,6 +40,7 @@ const createOrder = asynchandler(async (req, res) => {
     if (!course) {
       throw new Error("Course not found", 404);
     }
+
 
     const data = {
       userId: user._id,
@@ -64,7 +65,7 @@ const createOrder = asynchandler(async (req, res) => {
     // };
     // sendMail(mailData)
 
-    user?.courses.push(course._id);
+    user?.courses.push(course);
 
     await user?.save();
 

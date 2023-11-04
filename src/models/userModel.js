@@ -39,7 +39,7 @@ var userSchema = new mongoose.Schema(
     },
     courses: [
       {
-        course_id: String,
+        type: Object,
       },
     ],
     isVerified: {

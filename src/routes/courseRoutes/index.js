@@ -20,6 +20,7 @@ const {
   createCourseQuestion,
   answerQuestion,
   uploadCourseThumbnail,
+  getAllCoursesInfo,
 } = require("../../controllers/courseController/courseCont");
 const {
   createLesson,
@@ -50,6 +51,7 @@ courseRouter.put(
   authMiddleware,
   uploadCourseVideo
 );
+courseRouter.get("/all-courses", authMiddleware, getAllCoursesInfo);
 courseRouter.get("/",  getAllCoursesWithoutSub);
 courseRouter.get("/:id", getSingleWithoutSubCourse);
 courseRouter.get("/get-user-course-content/:id",authMiddleware, getCourseContentToValidUser);

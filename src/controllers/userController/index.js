@@ -38,7 +38,7 @@ const userLogin = asynchandler(async (req, res) => {
   // check if user exist or not
   const findUser = await User.findOne({ email });
   if (findUser && (await findUser.isPasswordMatched(password))) {
-    const { password, ...others } = findUser._doc;
+    const { password,courses, ...others } = findUser._doc;
     res.status(200).json({
       status: true,
       message: "Logged in successfully",
@@ -129,7 +129,7 @@ const getAUser2 = asynchandler(async (req, res) => {
       res.status(400).json("you only get yourself");
     } else {
       const findOneUser = await User.findById(id);
-      const { password, ...others } = findOneUser._doc;
+      const { password,courses, ...others } = findOneUser._doc;
       res.status(200).json({
         status: true,
         message: "success",
@@ -156,7 +156,7 @@ const updateAUser = asynchandler(async (req, res) => {
       }
       const user = await User.findByIdAndUpdate(id, req.body, { new: true });
       // await redis.set(user.id, JSON.stringify(user));
-      const { password, ...others } = user._doc;
+      const { password, courses, ...others } = user._doc;
 
       res.status(200).json({
         status: true,
@@ -211,7 +211,7 @@ const updateAvatar = asynchandler(async (req, res) => {
         };
       }
     }
-    const { password, ...others } = user._doc;
+    const { password, courses, ...others } = user._doc;
     await user.save();
     res.status(200).json({
       status: true,

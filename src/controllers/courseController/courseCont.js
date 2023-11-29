@@ -137,12 +137,15 @@ const getAllCourseByAdmin = asynchandler(async (req, res) => {});
 // ####################### GET ALL COURSES with out sub ########################
 
 const getAllCoursesWithoutSub = asynchandler(async (req, res) => {
-  const { category } = req.query;
+  const { category, name } = req.query;
 
   let queryObject = {};
   if (category) {
     queryObject.category = category;
   }
+    if (name) {
+      queryObject.name = { $regex: name, $options: "i" };
+    }
   try {
     const getCourse = await Course.find(queryObject).select(
       "-lessonData.videoUrl -lessonData.description -lessonData.links -lessonData.questions -lessonData.links -lessonData.videoSection"
@@ -160,18 +163,23 @@ const getAllCoursesWithoutSub = asynchandler(async (req, res) => {
 
 const getAllCoursesInfo = asynchandler(async (req, res) => {
   const { courseId, userId } = req.params;
-  const { category } = req.query;
+  const { category, name } = req.query;
 
   let queryObject = {};
   if (category) {
     queryObject.category = category;
   }
+  if (name) {
+    // queryObject.name = {$regex: name, $options:'i'};
+    queryObject.name = name;
+  }
+  console.log(queryObject, "queryObject");
   try {
     const getCourse = await Course.find(queryObject);
     res.status(201).json({
       status: true,
       message: "Successfully",
-      // nbHits: getCourse.length,
+      nbHits: getCourse.length,
       getCourse,
     });
   } catch (error) {

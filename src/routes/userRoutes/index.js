@@ -30,7 +30,7 @@ userRouter.post("/login", validateEmail, userLogin);
 userRouter.post("/forgot-password", validateEmail, forgotpassword)
 
 //GET ROUTES
-userRouter.get("/all-users", authMiddleware, isAdmin, getAllUsers);
+userRouter.get("/all-users", authMiddleware,  getAllUsers);
 userRouter.get("/me", authMiddleware, getMe);
 userRouter.get("/:id", authMiddleware, getAUser);
 
